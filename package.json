@@ -1,0 +1,28 @@
+{
+  "name": "eslint-typescript-vue-2-object-reactivity",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup src/index.ts --no-splitting --minify",
+    "prepare": "npm run build"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Maxim Mazurok",
+    "email": "maxim@mazurok.com",
+    "url": "https://maxim.mazurok.com"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/eslint": "^7.28.0",
+    "@types/estree": "^0.0.50",
+    "@types/node": "^16.9.6",
+    "tsup": "^5.2.0",
+    "typescript": "^4.4.3"
+  }
+}
