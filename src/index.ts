@@ -1,9 +1,7 @@
-import { requireVueSet } from "./require-vue-set";
+import { requireVueSet } from "./rules/require-vue-set";
 
 module.exports = {
   rules: {
-    "require-vue-set": {
-      create: requireVueSet,
-    },
+    "require-vue-set": requireVueSet,
   },
 };

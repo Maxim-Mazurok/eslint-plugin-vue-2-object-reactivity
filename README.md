@@ -7,9 +7,11 @@ See these:
 - https://github.com/Maxim-Mazurok/vue-3-vuex-object-reactivity
 - https://github.com/Maxim-Mazurok/vue-2-vuex-object-reactivity-typescript - will be used to test this rule
 
-This will only work with TypeScript because we need to know that we're dealing with `Vuex.Store`.
+~~This will only work with TypeScript because we need to know that we're dealing with `Vuex.Store`.~~
+Actually, we probably can make it work with JS, because we don't really use TS features right now...
 
 Bootstrapped with https://dev.to/bwca/create-a-custom-eslint-rule-with-typescript-4j3d
+See also: https://dev.to/alexgomesdev/writing-custom-typescript-eslint-rules-how-i-learned-to-love-the-ast-15pn and https://github.com/amzn/eslint-plugin-no-date-parsing
 
 ## Getting started
 
