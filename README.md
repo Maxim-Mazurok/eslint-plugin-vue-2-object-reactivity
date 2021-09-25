@@ -2,6 +2,7 @@
 
 These rules aim to solve the problem with Vue 2 Object Reactivity.
 See these:
+
 - https://github.com/Maxim-Mazurok/vue-2-vuex-object-reactivity
 - https://github.com/Maxim-Mazurok/vue-3-vuex-object-reactivity
 - https://github.com/Maxim-Mazurok/vue-2-vuex-object-reactivity-typescript - will be used to test this rule
@@ -9,3 +10,30 @@ See these:
 This will only work with TypeScript because we need to know that we're dealing with `Vuex.Store`.
 
 Bootstrapped with https://dev.to/bwca/create-a-custom-eslint-rule-with-typescript-4j3d
+
+## Getting started
+
+In this project:
+
+```bash
+npm link
+```
+
+In [Vue 2 TS project](https://github.com/Maxim-Mazurok/vue-2-vuex-object-reactivity-typescript):
+
+Using config:
+
+```js
+module.exports = {
+  plugins: ["vue-2-object-reactivity"],
+  rules: {
+    "vue-2-object-reactivity/require-vue-set": "error",
+  },
+};
+```
+
+```bash
+npm ci
+npm link "eslint-plugin-vue-2-object-reactivity"
+npm run lint
+```
