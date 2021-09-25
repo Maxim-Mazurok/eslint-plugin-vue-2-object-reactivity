@@ -1,4 +1,4 @@
-# eslint-typescript-vue-2-object-reactivity
+# eslint-plugin-vue-2-object-reactivity
 
 These rules aim to solve the problem with Vue 2 Object Reactivity.
 See these:

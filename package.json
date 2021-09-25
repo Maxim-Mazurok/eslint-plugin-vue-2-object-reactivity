@@ -1,5 +1,5 @@
 {
-  "name": "eslint-typescript-vue-2-object-reactivity",
+  "name": "eslint-plugin-vue-2-object-reactivity",
   "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
