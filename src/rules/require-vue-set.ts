@@ -8,6 +8,8 @@ import {
 } from "eslint-etc";
 import { isMethodDeclaration, isObjectLiteralExpression } from "typescript";
 
+const debug = (string: string) => process.env.DEBUG && console.log(string);
+
 export const requireVueSet = ESLintUtils.RuleCreator(
   () => "https://github.com/Maxim-Mazurok/eslint-plugin-vue-2-object-reactivity"
 )({
@@ -26,22 +28,20 @@ export const requireVueSet = ESLintUtils.RuleCreator(
   },
   defaultOptions: [],
   create: (context) => {
-    const { program, esTreeNodeToTSNodeMap, tsNodeToESTreeNodeMap } =
+    const { esTreeNodeToTSNodeMap, tsNodeToESTreeNodeMap } =
       ESLintUtils.getParserServices(context);
-    const checker = program.getTypeChecker();
 
     function checkMutations(node: TSESTree.Property) {
-      // console.log(node);
       const tsNode = esTreeNodeToTSNodeMap.get(node.value);
       if (isObjectLiteralExpression(tsNode)) {
         const mutations = tsNode.properties;
         mutations.map((mutation) => {
           if (isMethodDeclaration(mutation)) {
-            console.log(`Mutation name: ${mutation.name.getText()}`);
+            debug(`Mutation name: ${mutation.name.getText()}`);
             if (mutation.parameters.length >= 1) {
               const stateParameter = mutation.parameters[0];
               const stateParameterName = stateParameter.name.getText();
-              console.log(`State parameter name: ${stateParameterName}`);
+              debug(`State parameter name: ${stateParameterName}`);
 
               const mutationCodeBlock = mutation.body;
               if (mutationCodeBlock !== undefined) {
@@ -49,13 +49,11 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                 const mutationCodeBlockESTree =
                   tsNodeToESTreeNodeMap.get(mutationCodeBlock);
 
-                const mutationCodeBlockScope = scope.childScopes.find((x) => {
-                  console.log("test");
-                  return (
+                const mutationCodeBlockScope = scope.childScopes.find(
+                  (x) =>
                     isFunctionExpression(x.block) &&
                     x.block.body === mutationCodeBlockESTree
-                  );
-                });
+                );
 
                 if (mutationCodeBlockScope !== undefined) {
                   const stateVariable = mutationCodeBlockScope.variables.find(
@@ -86,7 +84,7 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                         ) {
                           vueSetCallExpression.callee.object.name === "Vue" &&
                             vueSetCallExpression.callee.property.name === "set";
-                          console.log("Yay, Vue.set(state) found!");
+                          debug("Yay, Vue.set(state) found!");
                         }
 
                         // check if we see something being assigned to state.object.something
@@ -115,9 +113,7 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                           assignmentExpression.left.object.object.name ===
                             stateParameterName
                         ) {
-                          console.log(
-                            "Oh-oh, state.object.something = ... found!"
-                          );
+                          debug("Oh-oh, state.object.something = ... found!");
                           context.report({
                             node,
                             messageId: "useVueSet",

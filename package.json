@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-vue-2-object-reactivity",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "These rules aim to solve the problem with Vue 2 Object Reactivity",
   "main": "./dist/index.js",
   "files": [
