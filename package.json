@@ -1,7 +1,7 @@
 {
   "name": "eslint-plugin-vue-2-object-reactivity",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "These rules aim to solve the problem with Vue 2 Object Reactivity",
   "main": "./dist/index.js",
   "files": [
     "dist/**"
@@ -11,11 +11,21 @@
     "build": "npx -y tsup src/index.ts --no-splitting --minify",
     "prepare": "npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "vue",
+    "vuex",
+    "eslint",
+    "typescript",
+    "object-reactivity"
+  ],
   "author": {
     "name": "Maxim Mazurok",
     "email": "maxim@mazurok.com",
     "url": "https://maxim.mazurok.com"
+  },
+  "repository": {
+    "url": "https://github.com/Maxim-Mazurok/eslint-plugin-vue-2-object-reactivity",
+    "type": "git"
   },
   "license": "ISC",
   "devDependencies": {
