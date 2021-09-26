@@ -56,6 +56,13 @@ npm link "eslint-plugin-vue-2-object-reactivity"
 npm run lint
 ```
 
+or, to enable verbose output:
+
+```bash
+export DEBUG=true # to enable verbose output
+eslint src/store.ts
+```
+
 ## Additional info
 
 See these:
