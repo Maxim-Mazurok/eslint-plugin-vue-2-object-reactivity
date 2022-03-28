@@ -6,7 +6,11 @@ import {
   isIdentifier,
   isAssignmentExpression,
 } from "eslint-etc";
-import { isMethodDeclaration, isObjectLiteralExpression } from "typescript";
+import {
+  isMethodDeclaration,
+  isObjectLiteralExpression,
+  Node,
+} from "typescript";
 
 const debug = (string: string) => process.env.DEBUG && console.log(string);
 
@@ -31,8 +35,10 @@ export const requireVueSet = ESLintUtils.RuleCreator(
     const { esTreeNodeToTSNodeMap, tsNodeToESTreeNodeMap } =
       ESLintUtils.getParserServices(context);
 
-    function checkMutations(node: TSESTree.Property) {
-      const tsNode = esTreeNodeToTSNodeMap.get(node.value);
+    const checkTsNode = (
+      tsNode: Node,
+      node: TSESTree.Property | TSESTree.VariableDeclarator
+    ) => {
       if (isObjectLiteralExpression(tsNode)) {
         const mutations = tsNode.properties;
         mutations.map((mutation) => {
@@ -128,11 +134,23 @@ export const requireVueSet = ESLintUtils.RuleCreator(
           }
         });
       }
+    };
+
+    function checkMutationsInProperty(node: TSESTree.Property) {
+      const tsNode = esTreeNodeToTSNodeMap.get(node.value);
+      checkTsNode(tsNode, node);
+    }
+
+    function checkMutationsInVariable(node: TSESTree.VariableDeclarator) {
+      const tsNode = esTreeNodeToTSNodeMap.get(node.init);
+      checkTsNode(tsNode, node);
     }
 
     return {
+      // http://estools.github.io/esquery/   https://github.com/estools/esquery
       'Property[key.name="mutations"][value.type="ObjectExpression"][value.properties.length!=0]':
-        checkMutations,
+        checkMutationsInProperty,
+      "VariableDeclaration > [id.name=mutations]": checkMutationsInVariable,
       // TODO: maybe narrow the search by looking for mutations declaration inside of Vuex.Store?
     };
   },

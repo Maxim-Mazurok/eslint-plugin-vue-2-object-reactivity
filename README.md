@@ -4,6 +4,30 @@ These rules aim to solve the problem with Vue 2 Object Reactivity.
 
 ## Getting started
 
+### What does it catch
+
+1. When `mutations` is a property, for example:
+   ```ts
+   export default new Vuex.Store<{ object: { [key: string]: string } }>({
+     //...
+     mutations: {
+       setPropOnObject(state, { prop, val }: { prop: string; val: string }) {
+         state.object[prop] = val; // <== this will be reported as error
+         Vue.set(state.object, prop, val); // <== this is correct/expected
+       },
+     },
+   });
+   ```
+2. When `mutations` is a variable (not necessarily used in `Vuex.Store`, just searching for the name "mutations"), for example:
+   ```ts
+   const mutations: {
+     setPropOnObject(state, { prop, val }: { prop: string; val: string }) {
+       state.object[prop] = val; // <== this will be reported as error
+       Vue.set(state.object, prop, val); // <== this is correct/expected
+     },
+   };
+   ```
+
 ### Users
 
 Install this plugin:
