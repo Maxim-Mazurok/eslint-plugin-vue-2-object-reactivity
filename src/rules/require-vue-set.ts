@@ -12,7 +12,8 @@ import {
   Node,
 } from "typescript";
 
-const debug = (string: string) => process.env.DEBUG && console.log(string);
+const debug: typeof console.log = (...args: Parameters<typeof console.log>) =>
+  process.env.DEBUG && console.log(...args);
 
 export const requireVueSet = ESLintUtils.RuleCreator(
   () => "https://github.com/Maxim-Mazurok/eslint-plugin-vue-2-object-reactivity"
@@ -71,7 +72,7 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                         (x) => x.resolved === stateVariable
                       );
 
-                    stateReferences.find((stateReference) => {
+                    stateReferences.forEach((stateReference) => {
                       const stateReferenceParent =
                         stateReference.identifier.parent;
                       if (
@@ -91,6 +92,9 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                           vueSetCallExpression.callee.object.name === "Vue" &&
                             vueSetCallExpression.callee.property.name === "set";
                           debug("Yay, Vue.set(state) found!");
+                          return;
+                        } else {
+                          debug("Vue.set not found...");
                         }
 
                         // check if we see something being assigned to state.object.something
@@ -101,30 +105,18 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                             break;
                           }
                           assignmentExpression = assignmentExpression.parent;
+                          debug({ assignmentExpression });
                         } while (
                           assignmentExpression !== null &&
+                          isMemberExpression(assignmentExpression) &&
                           !isAssignmentExpression(assignmentExpression)
                         );
 
-                        if (
-                          assignmentExpression !== null &&
-                          isAssignmentExpression(assignmentExpression) &&
-                          isMemberExpression(assignmentExpression.left) &&
-                          isMemberExpression(
-                            assignmentExpression.left.object
-                          ) &&
-                          isIdentifier(
-                            assignmentExpression.left.object.object
-                          ) &&
-                          assignmentExpression.left.object.object.name ===
-                            stateParameterName
-                        ) {
-                          debug("Oh-oh, state.object.something = ... found!");
-                          context.report({
-                            node,
-                            messageId: "useVueSet",
-                          });
-                        }
+                        debug("Oh-oh, state.object.something = ... found!");
+                        context.report({
+                          node,
+                          messageId: "useVueSet",
+                        });
                       }
                     });
                   }
