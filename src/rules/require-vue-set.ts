@@ -115,6 +115,10 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                         debug("Oh-oh, state.object.something = ... found!");
                         context.report({
                           node,
+                          loc: {
+                            start: stateReferenceParent.loc.start,
+                            end: assignmentExpression.loc.end,
+                          },
                           messageId: "useVueSet",
                         });
                       }
