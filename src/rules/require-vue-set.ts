@@ -117,8 +117,17 @@ export const requireVueSet = ESLintUtils.RuleCreator(
 
                         if (memberExpressionsSaw <= 1) {
                           debug(
-                            "assignment to prop, nor prop of prop, which is fine"
+                            "assignment to prop, not prop of prop, which is fine"
                           );
+                          return;
+                        }
+
+                        if (
+                          assignmentExpression === null ||
+                          !isAssignmentExpression(assignmentExpression)
+                          // isMemberExpression(assignmentExpression.left) &&
+                        ) {
+                          debug("most likely `const something = state.prop.prop`");
                           return;
                         }
 
