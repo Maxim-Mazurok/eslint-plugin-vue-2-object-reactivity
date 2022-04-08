@@ -142,8 +142,27 @@ createRuleTester({
       const prop5 = "something";
       export default {
         mutations: {
-           invalid(state) {
+          invalid(state) {
             state.object.prop1["prop2"].prop3[prop5] = 123
+          }
+        }
+      }
+      `,
+      errors: [{ messageId: "useVueSet" }],
+    },
+    // assignment to object
+    {
+      code: `
+      export default {
+        mutations: {
+          invalid(state) {
+            const schedulePK = "test";
+            const schedule = { test: 123 };
+            const scheduleUpdates = { update: 321 };
+            state.schedules[schedulePK] = {
+              ...schedule,
+              ...scheduleUpdates,
+            }
           }
         }
       }
