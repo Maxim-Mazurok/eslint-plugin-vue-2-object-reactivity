@@ -59,6 +59,16 @@ createRuleTester({
       }
     }
     `,
+    // no need for Vue.set
+    `
+    export default {
+      mutations: {
+        valid(state) {
+          state.string = "value"
+        }
+      }
+    }
+    `,
   ],
 
   invalid: [

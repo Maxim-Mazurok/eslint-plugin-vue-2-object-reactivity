@@ -100,10 +100,13 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                         // check if we see something being assigned to state.object.something
                         let assignmentExpression: TSESTree.Node =
                           stateReferenceParent;
+                        let memberExpressionsSaw = 0;
                         do {
                           if (assignmentExpression.parent === undefined) {
                             break;
                           }
+                          if (isMemberExpression(assignmentExpression))
+                            memberExpressionsSaw++;
                           assignmentExpression = assignmentExpression.parent;
                           debug({ assignmentExpression });
                         } while (
@@ -111,6 +114,13 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                           isMemberExpression(assignmentExpression) &&
                           !isAssignmentExpression(assignmentExpression)
                         );
+
+                        if (memberExpressionsSaw <= 1) {
+                          debug(
+                            "assignment to prop, nor prop of prop, which is fine"
+                          );
+                          return;
+                        }
 
                         debug("Oh-oh, state.object.something = ... found!");
                         context.report({
