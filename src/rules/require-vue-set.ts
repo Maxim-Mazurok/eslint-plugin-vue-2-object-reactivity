@@ -23,7 +23,6 @@ export const requireVueSet = ESLintUtils.RuleCreator(
     type: "problem",
     docs: {
       description: "Require `Vue.set()` for object changes",
-      category: "Possible Errors",
       recommended: "error",
     },
     messages: {
@@ -42,7 +41,7 @@ export const requireVueSet = ESLintUtils.RuleCreator(
     ) => {
       if (isObjectLiteralExpression(tsNode)) {
         const mutations = tsNode.properties;
-        mutations.map((mutation) => {
+        mutations?.map((mutation) => {
           if (isMethodDeclaration(mutation)) {
             debug(`Mutation name: ${mutation.name.getText()}`);
             if (mutation.parameters.length >= 1) {
@@ -127,7 +126,9 @@ export const requireVueSet = ESLintUtils.RuleCreator(
                           !isAssignmentExpression(assignmentExpression)
                           // isMemberExpression(assignmentExpression.left) &&
                         ) {
-                          debug("most likely `const something = state.prop.prop`");
+                          debug(
+                            "most likely `const something = state.prop.prop`"
+                          );
                           return;
                         }
 
@@ -157,7 +158,7 @@ export const requireVueSet = ESLintUtils.RuleCreator(
     }
 
     function checkMutationsInVariable(node: TSESTree.VariableDeclarator) {
-      const tsNode = esTreeNodeToTSNodeMap.get(node.init);
+      const tsNode = esTreeNodeToTSNodeMap.get(node.init!);
       checkTsNode(tsNode, node);
     }
 
